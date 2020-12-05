@@ -1,0 +1,35 @@
+specVersion: 0.0.2
+description: True USD - TUSD stable coin
+repository: https://github.com/ssilvajb/subgraph-tusd
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: TUSD
+    network: mainnet
+    source:
+      address: '0xffc40F39806F1400d8278BfD33823705b5a4c196'
+      abi: TUSD
+      startBlock: 10933574
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.4
+      language: wasm/assemblyscript
+      entities:
+        - User
+        - Minter
+        - UserCounter
+        - MinterCounter
+        - TransferCounter
+        - TotalSupply
+      abis:
+        - name: TUSD
+          file: ./abis/TUSD.json
+      eventHandlers:
+        - event: Burn(indexed address,uint256)
+          handler: handleBurn
+        - event: Mint(indexed address,uint256)
+          handler: handleMint
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+      file: ./src/mapping.ts
